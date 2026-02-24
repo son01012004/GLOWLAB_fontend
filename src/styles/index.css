@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #86C2A1;
+  --color-secondary: #BEE3CC;
+  --color-dark: #FAFCFB;
+  --color-glass: rgba(255, 255, 255, 0.7);
+}
+
+@layer base {
+  body {
+    background-color: var(--color-dark);
+    color: #2D3748;
+    font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    margin: 0;
+    overflow-x: hidden;
+  }
+}
+
+@utility glass-effect {
+  background-color: var(--color-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 40px 0 rgba(134, 194, 161, 0.15);
+  border-radius: 1.5rem;
+}
+
+@utility bg-glow-gradient {
+  background-image: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+}
+
+/* HIỆU ỨNG BACKGROUND ĐƯỢC VIẾT RIÊNG ĐỂ ĐẢM BẢO CHẠY 100% */
+.animated-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background-color: var(--color-dark);
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.6;
+  animation: float 15s infinite ease-in-out alternate;
+}
+
+.blob-1 {
+  top: -10%; left: -10%;
+  width: 500px; height: 500px;
+  background-color: var(--color-primary);
+  animation-delay: 0s;
+}
+
+.blob-2 {
+  bottom: -20%; right: -10%;
+  width: 600px; height: 600px;
+  background-color: var(--color-secondary);
+  animation-delay: -3s;
+}
+
+.blob-3 {
+  top: 30%; left: 40%;
+  width: 450px; height: 450px;
+  background-color: #A3D8B9;
+  animation-delay: -7s;
+}
+
+@keyframes float {
+  0% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(50px, -60px) scale(1.1); }
+  100% { transform: translate(-30px, 40px) scale(0.9); }
+}
