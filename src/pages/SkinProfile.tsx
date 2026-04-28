@@ -60,8 +60,7 @@ const SkinProfile: React.FC = () => {
             <h3 className="font-bold text-[#1E293B] flex items-center gap-2 mb-6 uppercase text-xs tracking-widest">
               <Info className="w-4 h-4 text-[#86C2A1]" /> Biểu đồ chỉ số da
             </h3>
-            <div className="h-[250px] w-full">
-            <div className="h-[300px] w-full" style={{ minWidth: 0 }}></div>
+            <div className="h-[300px] w-full relative">
               <ResponsiveContainer width="100%" height="100%">
                 <RadarChart cx="50%" cy="50%" outerRadius="80%" data={chartData}>
                   <PolarGrid stroke="#e2e8f0" />

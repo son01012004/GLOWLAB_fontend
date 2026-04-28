@@ -10,6 +10,7 @@ import { clearCart } from '../store/cartSlice';
 import { message } from 'antd';
 import type { RootState } from '../store';
 import api from '../utils/axios';
+import { getRandomImage } from '../utils/randomImage';
 
 const EMPTY_ARRAY: any[] = [];
 
@@ -201,7 +202,7 @@ const CheckoutPage: React.FC = () => {
                   <div key={item.id} className="flex items-center gap-4 bg-white/5 p-3 rounded-2xl border border-white/10">
                     <div className="w-16 h-16 bg-gray-50 rounded-xl overflow-hidden shrink-0 flex items-center justify-center">
                       <img 
-                        src={item.imageUrl || 'https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=200&h=200&auto=format&fit=crop'} 
+                        src={item.imageUrl || getRandomImage(item.id || item.name || 'default')} 
                         alt={item.name} 
                         className="w-full h-full object-cover" 
                       />

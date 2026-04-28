@@ -15,7 +15,7 @@ const ProtectedRoute: React.FC = () => {
 
   useEffect(() => {
     if (!isAuth) {
-      message.error("Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại!");
+      message.error("Vui lòng đăng nhập để tiếp tục!");
     }
   }, [isAuth]);
 

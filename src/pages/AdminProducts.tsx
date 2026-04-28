@@ -7,6 +7,7 @@ import {
 import { message, Popconfirm } from 'antd';
 import { productService } from '../services/product.service';
 import { adminService } from '../services/admin.service';
+import { getRandomImage } from '../utils/randomImage';
 
 interface ProductRequest {
   name: string;
@@ -206,9 +207,9 @@ const AdminProducts: React.FC = () => {
                         <div className="flex items-center gap-5">
                           <div className="w-16 h-16 rounded-2xl bg-gray-100 overflow-hidden border border-gray-200 shrink-0">
                             {product.imageUrl ? (
-                              <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=100' }}/>
+                              <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.src = getRandomImage(product.id || product.name || 'default') }}/>
                             ) : (
-                              <div className="w-full h-full flex items-center justify-center text-gray-300"><ImageIcon size={24}/></div>
+                              <img src={getRandomImage(product.id || product.name || 'default')} alt={product.name} className="w-full h-full object-cover"/>
                             )}
                           </div>
                           <div>

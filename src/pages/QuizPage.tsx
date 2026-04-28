@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, ArrowRight, ArrowLeft, Loader2, Sparkles, ClipboardList } from 'lucide-react';
 import { message, Progress } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import type { RootState } from '../store';
 import { quizService } from '../services/quiz.service';
 
 const QuizPage: React.FC = () => {
@@ -12,6 +14,7 @@ const QuizPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
 
   useEffect(() => {
     quizService.getQuestions()
@@ -30,6 +33,12 @@ const QuizPage: React.FC = () => {
 
   const handleSelect = (questionId: number, optionId: string) => {
     setAnswers({ ...answers, [questionId]: optionId });
+    // Auto-advance to next question after a short delay
+    if (currentStep < questions.length - 1) {
+      setTimeout(() => {
+        setCurrentStep(currentStep + 1);
+      }, 500);
+    }
   };
 
   const handleNext = async () => {
@@ -43,6 +52,12 @@ const QuizPage: React.FC = () => {
     if (currentStep < questions.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
+      if (!isAuthenticated && !localStorage.getItem('token')) {
+        message.success("Hoàn thành bài trắc nghiệm! Vui lòng đăng nhập để nhận phân tích chi tiết.");
+        navigate('/login');
+        return;
+      }
+
       setSubmitting(true);
       try {
         // Đóng gói Payload theo chuẩn QuizSubmitRequest: { answerIds: [...] }
@@ -137,7 +152,7 @@ const QuizPage: React.FC = () => {
                 <ArrowLeft className="w-4 h-4" /> QUAY LẠI
               </button>
               <button onClick={handleNext} disabled={submitting} className="flex items-center gap-3 px-10 py-4 bg-[#1E293B] text-white rounded-2xl font-bold text-xs tracking-widest shadow-xl hover:-translate-y-1 transition-all">
-                {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <>{currentStep === questions.length - 1 ? 'XEM KẾT QUẢ' : 'TIẾP THEO'} <ArrowRight className="w-4 h-4" /></>}
+                {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <>{currentStep === questions.length - 1 ? (isAuthenticated || localStorage.getItem('token') ? 'XEM KẾT QUẢ' : 'ĐĂNG NHẬP ĐỂ XEM') : 'TIẾP THEO'} <ArrowRight className="w-4 h-4" /></>}
               </button>
             </div>
           </motion.div>

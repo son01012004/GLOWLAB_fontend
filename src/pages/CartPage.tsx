@@ -5,6 +5,7 @@ import { ArrowLeft, Trash2, Plus, Minus, ShoppingBag, ArrowRight, ShieldCheck, S
 import { useSelector, useDispatch } from 'react-redux';
 import { addToCart, decreaseQuantity, removeFromCart } from '../store/cartSlice';
 import type { RootState } from '../store';
+import { getRandomImage } from '../utils/randomImage';
 
 const EMPTY_ARRAY: any[] = [];
 
@@ -94,7 +95,7 @@ const CartPage: React.FC = () => {
                     {/* FIX ẢNH BỊ LỖI CHỮ: Thêm ảnh fallback mặc định */}
                     <div className="w-full sm:w-28 h-28 shrink-0 rounded-[1.5rem] overflow-hidden bg-gray-50 border border-white shadow-inner relative flex items-center justify-center">
                       <img 
-                        src={item.imageUrl || 'https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=400&h=500&auto=format&fit=crop'} 
+                        src={item.imageUrl || getRandomImage(item.id || item.name || 'default')} 
                         alt={item.name} 
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
                       />

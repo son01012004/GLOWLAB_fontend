@@ -13,6 +13,7 @@ import CheckoutPage from './pages/CheckoutPage';
 import OrderSuccessPage from './pages/OrderSuccessPage';
 import ProfilePage from './pages/ProfilePage';
 import AboutPage from './pages/AboutPage';
+import Header from './components/Header';
 
 // THÊM CÁC TRANG ADMIN
 import AdminLayout from './layouts/AdminLayout';
@@ -36,6 +37,7 @@ const App: React.FC = () => {
       </div>
 
       <div className="relative z-10">
+        <Header />
         <Routes>
           {/* ======================================= */}
           {/* CÁC TRANG CÔNG KHAI (Ai cũng xem được)  */}
@@ -43,7 +45,6 @@ const App: React.FC = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<AuthPage />} />
           <Route path="/quiz" element={<QuizPage />} />
-          <Route path="/skin-profile" element={<SkinProfile />} />
           <Route path="/shop" element={<ShopPage />} />
           <Route path="/product/:id" element={<ProductDetailPage />} />
           <Route path="/cart" element={<CartPage />} />
@@ -53,6 +54,7 @@ const App: React.FC = () => {
           {/* CÁC TRANG BẢO MẬT (Bắt buộc đăng nhập) */}
           {/* ======================================= */}
           <Route element={<ProtectedRoute />}>
+            <Route path="/skin-profile" element={<SkinProfile />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/order-success" element={<OrderSuccessPage />} />
             <Route path="/my-account" element={<ProfilePage />} />
@@ -69,7 +71,7 @@ const App: React.FC = () => {
           <Route path="customers" element={<AdminCustomers />} />
             {/* Thêm các trang quản lý khác ở đây */} 
           </Route>
-          </Route>S
+          </Route>
 
           {/* Bắt lỗi 404: Tránh màn hình trắng nếu khách gõ sai đường link */}
           <Route path="*" element={<Navigate to="/" replace />} />

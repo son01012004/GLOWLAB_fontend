@@ -6,6 +6,8 @@ export const productService = {
     keyword?: string, 
     brand?: string, 
     skinType?: string, 
+    category?: string,
+    sort?: string,
     page?: number, 
     size?: number 
   }) => {

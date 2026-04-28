@@ -8,6 +8,7 @@ import { message, Pagination, Empty, Badge } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useDebounce } from '../hooks/useDebounce';
 import type { RootState } from '../store';
+import { getRandomImage } from '../utils/randomImage';
 
 const ShopPage: React.FC = () => {
   const navigate = useNavigate();
@@ -22,6 +23,8 @@ const ShopPage: React.FC = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [skinType, setSkinType] = useState('');
+  const [category, setCategory] = useState('');
+  const [brand, setBrand] = useState('');
   const [sortBy, setSortBy] = useState('name,asc');
   const [page, setPage] = useState(0);
 
@@ -33,8 +36,10 @@ const ShopPage: React.FC = () => {
       const queryParams = {
         page: page,
          size: 12,
-         keyword: debouncedSearch.trim() !== '' ? debouncedSearch : undefined, // Sửa null thành undefined
-         skinType: skinType !== '' ? skinType : undefined,                     // Sửa null thành undefined
+         keyword: debouncedSearch.trim() !== '' ? debouncedSearch : undefined,
+         skinType: skinType !== '' ? skinType : undefined,
+         category: category !== '' ? category : undefined,
+         brand: brand !== '' ? brand : undefined,
         sort: sortBy
       };
 
@@ -48,7 +53,7 @@ const ShopPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [debouncedSearch, skinType, sortBy, page]);
+  }, [debouncedSearch, skinType, category, brand, sortBy, page]);
 
   useEffect(() => {
     loadProducts();
@@ -130,32 +135,52 @@ const ShopPage: React.FC = () => {
           </div>
         </div>
 
-        {/* FILTER CHIPS */}
-        <div className="flex items-center gap-3 overflow-x-auto pb-4 no-scrollbar">
-          <button
-            onClick={() => { setSkinType(''); setPage(0); }}
-            className={`px-10 py-3.5 rounded-full text-[10px] font-black tracking-widest transition-all whitespace-nowrap border ${
-              skinType === ''
-                ? 'bg-[#86C2A1] text-white border-[#86C2A1] shadow-lg shadow-[#86C2A1]/20'
-                : 'bg-white/40 backdrop-blur-sm text-gray-400 border-white/80 hover:border-[#86C2A1]/40'
-            }`}
-          >
-            TẤT CẢ
-          </button>
-
-          {['OILY', 'DRY', 'SENSITIVE', 'NORMAL', 'COMBINATION'].map((type) => (
-            <button
-              key={type}
-              onClick={() => { setSkinType(type); setPage(0); }}
-              className={`px-10 py-3.5 rounded-full text-[10px] font-black tracking-widest transition-all whitespace-nowrap border ${
-                skinType === type
-                  ? 'bg-[#86C2A1] text-white border-[#86C2A1] shadow-lg shadow-[#86C2A1]/20'
-                  : 'bg-white/40 backdrop-blur-sm text-gray-400 border-white/80 hover:border-[#86C2A1]/40'
-              }`}
+        {/* FILTER SECTION */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-8 bg-white/40 backdrop-blur-md rounded-[2.5rem] border border-white/60 shadow-xl">
+          {/* SKIN TYPE FILTER */}
+          <div className="space-y-3">
+            <label className="text-[10px] font-black text-[#1E293B] uppercase tracking-widest pl-4">Loại da</label>
+            <select
+              className="w-full p-4 rounded-2xl bg-white border border-transparent shadow-sm font-bold text-xs outline-none cursor-pointer hover:border-[#86C2A1] transition-all appearance-none text-gray-600"
+              value={skinType}
+              onChange={(e) => { setSkinType(e.target.value); setPage(0); }}
             >
-              DA {type}
-            </button>
-          ))}
+              <option value="">Tất cả loại da</option>
+              {['Oily', 'Dry', 'Sensitive', 'Normal', 'Combination'].map(t => (
+                <option key={t} value={t}>{t.toUpperCase()}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* CATEGORY FILTER */}
+          <div className="space-y-3">
+            <label className="text-[10px] font-black text-[#1E293B] uppercase tracking-widest pl-4">Danh mục</label>
+            <select
+              className="w-full p-4 rounded-2xl bg-white border border-transparent shadow-sm font-bold text-xs outline-none cursor-pointer hover:border-[#86C2A1] transition-all appearance-none text-gray-600"
+              value={category}
+              onChange={(e) => { setCategory(e.target.value); setPage(0); }}
+            >
+              <option value="">Tất cả danh mục</option>
+              {['Skincare', 'Cleansers', 'Moisturizers', 'Treatments', 'Sunscreen', 'Masks', 'Fragrance'].map(cat => (
+                <option key={cat} value={cat}>{cat.toUpperCase()}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* BRAND FILTER */}
+          <div className="space-y-3">
+            <label className="text-[10px] font-black text-[#1E293B] uppercase tracking-widest pl-4">Thương hiệu</label>
+            <select
+              className="w-full p-4 rounded-2xl bg-white border border-transparent shadow-sm font-bold text-xs outline-none cursor-pointer hover:border-[#86C2A1] transition-all appearance-none text-gray-600"
+              value={brand}
+              onChange={(e) => { setBrand(e.target.value); setPage(0); }}
+            >
+              <option value="">Tất cả thương hiệu</option>
+              {['Acqua di Parma', 'Algenist', 'Alpha-H', 'Alpyn Beauty', 'Adwoa Beauty', 'Aerin', 'Abbott', '54 Thrones'].map(b => (
+                <option key={b} value={b}>{b.toUpperCase()}</option>
+              ))}
+            </select>
+          </div>
         </div>
 
         {/* PRODUCT GRID */}
@@ -214,7 +239,7 @@ const ProductCard = ({ product, dispatch, navigate }: any) => (
       onClick={() => navigate(`/product/${product.id}`)}
     >
       <img
-        src={product.imageUrl || 'https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=400&h=500&auto=format&fit=crop'}
+        src={product.imageUrl || getRandomImage(product.id || product.name || 'default')}
         alt={product.name}
         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
       />

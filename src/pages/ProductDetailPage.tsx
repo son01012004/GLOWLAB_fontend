@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../store/cartSlice';
 import { message, Skeleton, Badge } from 'antd';
 import type { RootState } from '../store';
+import { getRandomImage } from '../utils/randomImage';
 
 // Tránh lỗi re-render của Redux khi giỏ hàng trống
 const EMPTY_ARRAY: any[] = [];
@@ -160,7 +161,7 @@ const ProductDetailPage: React.FC = () => {
           <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} className="relative aspect-[4/5] rounded-[3rem] overflow-hidden bg-white/60 backdrop-blur-md shadow-xl border border-white p-4">
             <div className="w-full h-full rounded-[2.5rem] overflow-hidden relative">
               <img 
-                src={product.imageUrl || 'https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=800'} 
+                src={product.imageUrl || getRandomImage(product.id || product.name || 'default')} 
                 alt={product.name} 
                 className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
               />
